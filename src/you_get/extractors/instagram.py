@@ -6,9 +6,11 @@ from ..common import *
 
 def instagram_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
     url = r1(r'([^?]*)', url)
+    
     cont = get_content(url, headers=fake_headers)
 
     vid = r1(r'instagram.com/\w+/([^/]+)', url)
+
     description = r1(r'<meta property="og:title" content="([^"]*)"', cont) or \
         r1(r'<title>([^<]*)</title>', cont) # with logged-in cookies
     title = "{} [{}]".format(description.replace("\n", " "), vid)

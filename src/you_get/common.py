@@ -141,11 +141,18 @@ postfix = False
 prefix = None
 
 fake_headers = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'Priority':'u=0, i',
+    'Sec-Fetch-Dest':'document',
+    'Sec-Fetch-Mode':'navigate',
+    'Sec-Fetch-Site':'same-origin',
     'Accept-Charset': 'UTF-8,*;q=0.5',
     'Accept-Encoding': 'gzip,deflate,sdch',
-    'Accept-Language': 'en-US,en;q=0.8',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/123.0.2420.97'  # Latest Edge
+    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
+    'Sec-Ch-Ua':'"Microsoft Edge";v="125", "Chromium";v="125", "Not.A/Brand";v="24"',
+    'Sec-Ch-Ua-Full-Version-List':'"Microsoft Edge";v="125.0.2535.79", "Chromium";v="125.0.6422.112", "Not.A/Brand";v="24.0.0.0"',
+    'Sec-Ch-Ua-Platform':'"Windows"',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0'  # Latest Edge
 }
 
 if sys.stdout.isatty():
@@ -461,6 +468,7 @@ def get_content(url, headers={}, decoded=True):
     """
 
     logging.debug('get_content: %s' % url)
+    
 
     req = request.Request(url, headers=headers)
     if cookies:
@@ -475,7 +483,7 @@ def get_content(url, headers={}, decoded=True):
             cookie_strings.append(cookie.name + '=' + cookie.value)
         cookie_headers = {'Cookie': '; '.join(cookie_strings)}
         req.headers.update(cookie_headers)
-
+    logging.debug('headers: %s' % req.headers)
     response = urlopen_with_retry(req)
     data = response.read()
 
